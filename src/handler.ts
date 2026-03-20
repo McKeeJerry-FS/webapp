@@ -1,4 +1,12 @@
 import { IncomingMessage, ServerResponse } from "http";
-export const handler = (req: IncomingMessage, res: ServerResponse) => {
-    res.end("Hello, World!");
+import { readFile } from "fs/promises";
+export const handler =  async (req: IncomingMessage, res: ServerResponse) => {
+    try {
+        const data: Buffer = await readFile("data.json");
+        res.end(data, () => console.log("File sent"));
+    } catch (err: any) {
+        console.log(`Error: ${err.message}`);
+        res.statusCode = 500;
+        res.end();
+    }
 };
